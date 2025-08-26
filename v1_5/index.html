@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>OmniHuman-1.5</title>
+    <meta name="description" content="OmniHuman-1.5: Instilling an Active Mind in Avatars via Cognitive Simulation">
+    <meta name="keywords" content="Avatar, Animation, Cognitive Simulation, Multimodal, LLM">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
+    <style>
+            ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background-color: #666; } @font-face { font-family: 'Roboto'; font-style: normal; font-stretch: 100%; font-display: block; font-weight: 300 700; src: url(v1_5/roboto.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; } * { box-sizing: border-box; } video { background-color: #000; } #latent-interpolation video { aspect-ratio: 1; } img { background-color: #111; aspect-ratio: 1; } body { background-color: #000; color: #fff; font-family: "Roboto", sans-serif; padding: 0; margin: 0; }
+a{color:#999 !important;text-decoration:none !important}a:hover{color:#999 !important}a:visited{color:#999 !important}
+    pre, code{color:#999 !important}
+    #contributors strong{color:#fff !important;font-weight:700 !important}
+    .content p { color: #999 !important; } #home { position: absolute; top: 20px; left: max(calc(50vw - 1920px/2 + 192px), 10%); } #logo { width: 40px; height: 40px; position: fixed; top: 12px; right: max(calc(50vw - 1920px/2 + 192px), 10%); z-index: 1001; } #intro { padding: 140px 0 80px; } #intro h1 { font-size: 80px; font-weight: 300; margin: 20px 0; } #intro h2 { margin: 20px 0 40px; font-weight: 300; color: #ccc; } #intro strong { font-weight: 700; } #intro h2 strong { color: #fff; } section { max-width: 1920px; margin: 0 auto; } .content { padding: 0 10%; } .button { padding-right: 16px; border-radius: 8px; color: #fff; background-color: #333; cursor: pointer; transition: background-color .5s; text-decoration: none; margin-right: 8px; margin-bottom: 8px; display: inline-flex; align-items: center; overflow: hidden; } .button .icon { box-sizing: content-box; padding: 8px; background-color: #ccc; margin-right: 16px; transition: background-color .5s; } .button:hover { background-color: #fff; color: #000; } .button:hover .icon { background-color: #fff; } section { margin-top: 100px; } section:first-of-type { margin-top: 0; } .title { background-color: #000; position: sticky; top: 0; padding: 20px 10%; font-size: 20px; font-weight: 600; z-index: 1000; min-height: 60px; box-sizing: border-box; } .description { padding: 0 10% 20px; color: #999; line-height: 25px; font-weight: 300; } .highlight { color: #fff; font-weight: 500; } .flex-row { display: flex; column-gap: 5px; flex-wrap: nowrap; justify-content: space-between; padding: 0 5px 5px; } .flex-row > div { flex-grow: 1; flex-basis: 0; position: relative; } .flex > div { width: calc(100% / 3 - 5px * 2 / 3); margin-top: 2.5px; margin-bottom: 2.5px; position: relative; } .flex { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 0 5px; } .prompt-wrap { position: relative; } .flex-2 { justify-content: center; column-gap: 5px; } .flex-2 > div { width: calc(100% / 2 - 5px / 2); min-width: calc(100% / 3 - 5px * 2 / 3); max-width: calc(100vh - 200px); } video, img { width: 100%; } .prompt { max-width: calc(100% - 20px); position: absolute; background: #00000080; color: #ffffffe6; font-size: 10px; backdrop-filter: blur(10px); bottom: 10px; left: 10px; padding: 5px 10px; border-radius: 15px; opacity: 0; pointer-events: none; transition: opacity .5s; box-sizing: border-box; } .full-screen-button { width: 24px; height: 24px; border-radius: 12px; position: absolute; top: 10px; right: 10px; background-color: #00000080; backdrop-filter: blur(10px); background-size: 12px; background-repeat: no-repeat; background-position: center; opacity: 0; pointer-events: none; transition: opacity .5s; cursor: pointer; } .flex-very-compact .full-screen-button { width: 100%; height: 100%; top: 0; right: 0; border-radius: 0; } .margin-top { margin-top: 50px; } .ruler { text-align: center; position: sticky; top: 60px; z-index: 999; background-color: #000; color: #999; padding: 5px 0; } .ruler > div { width: 100%; overflow: hidden; } .selected { box-shadow: 0 0 0 5px #fff; } #footer { background: linear-gradient(transparent, #000 100px); padding-top: 100px; box-sizing: content-box; z-index: 10000; position: relative; } #footer #links { position: absolute; bottom: 16px; width: 100%; height: 50px; margin-top: 80px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; } #footer #links[visible] { transition: opacity .5s; transition-delay: .5s; opacity: 1; } #contributors { min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; font-size: 18px; font-weight: 200; } #contributors strong { color: #999; font-weight: 200; margin-top: 40px; margin-bottom: 20px; display: block; } #contributors a { display: block; padding: 3px 20px; border-radius: 100px; background-color: #000; transition: background-color .2s; text-decoration: none; color: #fff; } #contributors a:hover { background: #222; } table { width: calc(80% + 24px); margin: 0 auto; border-collapse: collapse; } thead { color: #ccc; } thead tr { position: sticky; top: 60px; background: #000; } tr { border-bottom: 1px solid #333; transition: background .5s; } td { padding: 10px 12px; } td:first-child { line-break: anywhere; } table a { display: block; width: 32px; height: 24px; background-position: center no-repeat; } .outer-wrap { display: flex; justify-content: center; } .nav-button { border-radius: 8px; color: #fff; background-color: #333; padding: 8px 12px 8px 8px; text-decoration: none; opacity: .5; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .2s; } .nav-button:hover { opacity: 1; } @media (hover: hover) { .prompt-wrap:hover .prompt, .full-screen-wrap:hover .full-screen-button { opacity: 1; pointer-events: all; } #contributors a:hover { background: #222; } tbody tr:hover { background: #222; } } @media (max-width: 640px) { #intro h1 { font-size: 50px; } #intro h2 { font-size: 20px; } .ruler { font-size: 10px; } } @media (max-width: 512px) { .content { padding: 0 12px; } .description { padding: 0 12px 20px; } .title { padding: 20px 12px; } #home { left: 12px; } #logo { right: 12px; position: absolute; } .ruler-tight { font-size: 6px; column-gap: 0; } .title-long { font-size: 16px; } .flex-compact .full-screen-button { width: 100%; height: 100%; top: 0; right: 0; border-radius: 0; } table { width: 100%; font-size: 12px; } td { padding: 10px 4px; } td:first-child { padding-left: 12px; } td:last-child { padding-right: 12px; } }
+    </style>
+    
+</head>
+<body>
+
+        <div class="nav-container" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1001; text-align: center;">
+
+
+
+            <button id="nav-button" class="nav-button"  style="border: 2px solid #000; padding: 10px 20px; text-align: center; display: inline-block;">
+                <strong style="color: rgb(255, 255, 255);"> More Research</strong>
+            </button>
+            <div id="dropdown-menu" class="dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; background-color: #333; border-radius: 8px; padding: 8px 0; margin-top: 4px; min-width: 160px; z-index: 1002;">
+                <a href="https://omnihuman-lab.github.io/" class="dropdown-item" style="display: block; padding: 8px 16px; color: white; text-decoration: none; transition: background-color 0.2s;">
+                    OmniHuman-1
+                </a>
+                <a href="https://zhenzhiwang.github.io/interacthuman/" class="dropdown-item" style="display: block; padding: 8px 16px; color: white; text-decoration: none; transition: background-color 0.2s;">
+                    InterActHuman
+                </a>
+                <a href="https://alignhuman.github.io/" class="dropdown-item" style="display: block; padding: 8px 16px; color: white; text-decoration: none; transition: background-color 0.2s;">
+                    AlignHuman
+                </a>
+                <a href="https://loopyavatar.github.io/" class="dropdown-item" style="display: block; padding: 8px 16px; color: white; text-decoration: none; transition: background-color 0.2s;">
+                    Loopy
+                </a>
+                <a href="https://cyberhost.github.io/" class="dropdown-item" style="display: block; padding: 8px 16px; color: white; text-decoration: none; transition: background-color 0.2s;">
+                    CyberHost
+                </a>
+                
+            </div>
+        </div>
+
+        <!-- <a href="#core-capabilities" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Core Capabilities</a>            <a href="#context-aware-audio-driven-animation" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Audio-Driven Animation</a>            <a href="#text-guided-multimodal-animation" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Multimodal Animation</a>            <a href="#cinematic-performances" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Cinematic Performances</a>            <a href="#rhythmic-performances" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Rhythmic Performances</a>            <a href="#diversity-and-robustness" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Diversity</a>            <a href="#multi-person-scene-performance" class="nav-link" style="color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; writing-mode: horizontal-tb; text-orientation: mixed;">Multi-Person Scene</a> -->
+        <div class="side-nav" style="position: fixed; top: 20px; left: 50%; transform: translateX(-55%); z-index: 1000; display: flex; flex-direction: row; gap: 20px; padding: 12px;">                    </div>        <style>            .nav-link:hover {                opacity: 1;            }            @media (max-width: 768px) {                .side-nav {                    left: 10px;                }                .nav-link {                    font-size: 12px;                }            }            @media (max-width: 512px) {                .side-nav {                    display: none;                }            }        </style>        <script>
+            // 下拉菜单交互功能
+            document.addEventListener('DOMContentLoaded', function() {
+                const navButton = document.getElementById('nav-button');
+                const dropdownMenu = document.getElementById('dropdown-menu');
+
+                navButton.addEventListener('click', function() {
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+
+                // 点击其他地方关闭下拉菜单
+                document.addEventListener('click', function(event) {
+                    if (!navButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
+
+                // 导航链接悬停效果
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('mouseover', function() {
+                        this.style.opacity = '1';
+                    });
+                    link.addEventListener('mouseout', function() {
+                        this.style.opacity = '0.7';
+                    });
+                });
+
+                // 下拉菜单项悬停效果
+                const dropdownItems = document.querySelectorAll('.dropdown-item');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('mouseover', function() {
+                        this.style.backgroundColor = '#555';
+                    });
+                    item.addEventListener('mouseout', function() {
+                        this.style.backgroundColor = 'transparent';
+                    });
+                });
+            });
+        </script>
+        <style>
+        .prompt-wrap {
+            position: relative;
+        }
+        .prompt-wrap video {
+            width: 100%;
+        }
+        /* 隐藏默认控件 */
+        .prompt-wrap video::-webkit-media-controls {
+            display: none !important;
+        }
+        /* 鼠标悬停时显示控件 */
+        .prompt-wrap:hover video::-webkit-media-controls {
+            display: flex !important;
+        }
+    </style>
+    <div id="intro">
+        <div class="content">
+            <div style="text-align: center;">
+            <h1 style="font-size: 7rem;"><strong>OmniHuman</strong>-1.5</h1>
+            <h2 style="font-size: 2.0rem;">Instilling an Active Mind in Avatars via Cognitive Simulation</h2>
+            <div style="margin-top: 30px;"></div>
+
+
+            <span style="opacity: 0.6;">
+                <a href="https://jianwenjiang.github.io/" target="_blank" rel="noopener noreferrer">Jianwen Jiang<sup>*†</sup></a>,
+                <a>Weihong Zeng<sup>*</sup></a>,
+                <a href="https://zhengzerong.github.io/" target="_blank" rel="noopener noreferrer">Zerong Zheng<sup>*</sup></a>,
+                <a>Jiaqi Yang<sup>*</sup></a>,
+                <a>Chao Liang<sup>*</sup></a>,
+                <a>Wang Liao<sup>*</sup></a>,
+                <a>Han Liang<sup>*</sup></a>,
+                <a>Yuan Zhang</a>,
+                <a>Mingyuan Gao</a>
+            </span>
+
+            <div style="margin-top: 10px;"></div>
+
+            <a style="opacity: 0.6;"><sup>*</sup>Equal contribution,<sup>†</sup>Project lead and corresponding author</a>
+                
+            <div style="margin-top: 15px;"></div>
+            <span style="opacity: 0.6;"><a>ByteDance Intelligent Creation</a></span>
+            
+            <div style="margin-top: 10px;"></div>
+            <a class="button" href="https://omnihuman-lab.github.io/v1_5" target="_blank" rel="noopener noreferrer" style="border: 2px solid #000; padding: 10px 20px; text-align: center; display: inline-block;">
+                    <span style="text-decoration: underline; color: rgb(158, 157, 157);">
+                        Research Paper
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <section id="Introducing Dual-System Avatars" style="margin-top: 200px;">
+        <div class="title">Introducing Dual-System Avatars</div>
+        <div class="description">
+            From a single image and a voice track, OmniHuman-1.5 generates expressive character animations that are <strong style="color: rgb(210, 209, 209); opacity: 1;">coherent with the speech's rhythm, prosody and semantic content</strong>, with optional text prompts for further refinement. Inspired by the mind's "System 1 and System 2" cognitive theory, our architecture bridges a Multimodal Large Language Model and a Diffusion Transformer, simulating two distinct modes of thought: slow, deliberate planning and fast, intuitive reaction. This powerful synergy enables the generation of <strong style="color: rgb(210, 209, 209); opacity: 1;">videos over one minute with highly dynamic</strong> motion, continuous camera movement, and complex multi-character interactions.
+            <div style="margin-top: 5px;"></div>
+            <strong style="color: rgb(210, 209, 209); opacity: 1;"> Note:</strong> The results shown were generated by our original research model. The video begins with the input image, and subtitles were added manually. While compressed, the file may still take a moment to load. Thank you for your patience.
+        </div>
+
+        <div class="flex-row">
+            <div class="prompt-wrap" style="position: relative; display: inline-block;">
+                <video playsinline controls  loop  preload="none" poster="vis/multi1.jpg" src="vis/multi1.mp4"></video>
+            </div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/a-2.jpg" src="vis/a-2.mp4"></video>
+                
+                <!-- <div class="prompt">A girl raises her left hand to cover her smiling mouth.</div> -->
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/a-1.jpg" src="vis/a-1.mp4"></video>
+                <!-- <div class="prompt">A girl raises her left hand to cover her smiling mouth.</div> -->
+            </div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/multi2.jpg" src="vis/multi2.mp4"></video>
+                <!-- <div class="prompt">A girl raises her left hand to cover her smiling mouth.</div> -->
+            </div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/a-3.jpg" src="vis/a-3.mp4"></video>
+                <!-- <div class="prompt">A girl raises her left hand to cover her smiling mouth.</div> -->
+            </div>
+        </div>
+    </section>
+
+    <section id="context-aware-audio-driven-animation">
+        <div class="title">Context-Aware Audio-Driven Animation</div>
+        <div class="description">
+            Our model transcends simple lip-sync and repetitive gestures by interpreting audio's semantic context, enabling characters to exhibit genuine emotional shifts and match gestures to their words and intent, as if driven by a will of their own.
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 1; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-7.jpg" src="vis/b-7.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-3_4.jpg" src="vis/b-3_4.mp4"></video><a class="full-screen-button"></a></div>
+            <!-- <div class="prompt-wrap"> -->
+                <!-- <video playsinline controls  loop  src="vis/b-4.mp4"></video><a class="full-screen-button"></a></div> -->
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/b-1.jpg" src="vis/b-1.mp4"></video><a class="full-screen-button"></a></div>
+            
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/b-5.jpg" src="vis/b-5.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/b-2.jpg" src="vis/b-2.mp4"></video><a class="full-screen-button"></a></div>
+            
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-6.jpg" src="vis/b-6.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.635; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-10.jpg" src="vis/b-10.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.635; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-8.jpg" src="vis/b-8.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/b-9.jpg" src="vis/b-9.mp4"></video><a class="full-screen-button"></a></div>
+            
+        </div>
+    </section>
+
+    
+    <section id="rhythmic-performances">
+        <div class="title">Rhythmic Performances</div>
+        <div class="description">
+            This versatility extends to music, where our framework crafts a soulful digital singer from a single image and song. Driven by our Reasoning Module, the motion captures rich musical expressions beyond mere lip-sync, including natural pauses and breaks, adeptly handling styles from solo ballads to upbeat concerts.
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-1.jpg" src="vis/e-1.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-9.jpg" src="vis/e-9.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-10.jpg" src="vis/e-10.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+
+    
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop preload="none" poster="vis/e-2.jpg" src="vis/e-2.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-7.jpg" src="vis/e-7.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+            <video playsinline controls  loop  preload="none" poster="vis/e-6.jpg" src="vis/e-6.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-3.jpg" src="vis/e-3.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/e-4.jpg" src="vis/e-4.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop preload="none" poster="vis/e-5.jpg" src="vis/e-5.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop preload="none" poster="vis/e-8.jpg" src="vis/e-8.mp4"></video><a class="full-screen-button"></a></div>
+            
+            
+        </div>
+    </section>
+    <section id="cinematic-performances">
+        <div class="title">Emotional Performances</div>
+        <div class="description">
+            From a single image and audio, our framework brings a digital actor to life. By analyzing the audio's emotional subtext without text prompts, it generates captivating, cinematic performances with full dramatic range, from explosive anger to heartfelt confession. The cases on this page are presented solely to showcase the capabilities of our research model.
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/d-1.jpg" src="vis/d-1.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/d-3.jpg" src="vis/d-3.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/d-13.jpg" src="vis/d-13.mp4"></video><a class="full-screen-button"></a></div>
+            
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-10.jpg" src="vis/d-10.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-11.jpg" src="vis/d-11.mp4"></video><a class="full-screen-button"></a></div> 
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-12.jpg" src="vis/d-12.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-2.jpg" src="vis/d-2.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-4.jpg" src="vis/d-4.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-5.jpg" src="vis/d-5.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-6.jpg" src="vis/d-6.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-7.jpg" src="vis/d-7.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.837; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-8.jpg" src="vis/d-8.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/d-9.jpg" src="vis/d-9.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        
+    </section>
+    <section id="text-guided-multimodal-animation">
+        <div class="title">Text-Guided Multimodal Animation</div>
+        <div class="description">
+            Our carefully designed framework accepts text prompts and demonstrates exceptional prompt-following, enabling precise control over object generation, camera movements, and specific actions, all while maintaining perfect audio sync.
+        </div>
+        <div class="flex-row">
+            
+            <div class="prompt-wrap">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 12%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    The camera follows as the man turns to face it and walks forward, singing in ecstasy. At times he touches his collar with both hands; at others he spreads his arms and lifts his head, lost in rapture.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-6.jpg" src="vis/c-6.mp4"></video><a class="full-screen-button"></a></div>
+            
+            <div class="prompt-wrap">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 12%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: The camera zooms in rapidly to a close-up of the woman’s shoes, then slowly pans up to her face. The beautiful girl sways her body charmingly.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-8.jpg" src="vis/c-8.mp4"></video><a class="full-screen-button"></a></div>
+            
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 20%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    The man sang intoxicatedly. He first glanced out the window, then placed his left hand on his chest as if in rapture. Next, he stood up and walked forward along the train aisle, once again placing his left hand on his chest.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-7.jpg" src="vis/c-7.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 20%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: Handheld camera. A woman looks into the distance. In the background, there are fireworks. The wind is blowing her hair and clothes. It has the feel of an arthouse film, a lonely atmosphere, and is shot on film
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-4.jpg" src="vis/c-4.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 18%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: Circle the camera to the right. When the camera focuses on the man's face, hold it still for a low, somber mood
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-9.jpg" src="vis/c-9.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 25%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: The character's face moves forward, they look at the camera, then reach out and poke the camera lens. After that, the camera moves backward, and the character crosses their arms and starts to talk.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-3.jpg" src="vis/c-3.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.5; height: 100%;">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 10%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: Man takes cigarette out, looks to camera, speaks.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-1.jpg" src="vis/c-1.mp4"></video><a class="full-screen-button"></a></div> 
+            <div class="prompt-wrap" style="flex-grow: 0.615; height: 100%;">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 45%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: A penguin is dancing. A pair of hands puts a cool pair of sunglasses on it. A band is playing, and the audience is cheering.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-5.jpg" src="vis/c-5.mp4"></video><a class="full-screen-button"></a></div> 
+            <div class="prompt-wrap" style="flex-grow: 1.99; height: 100%;">
+                <div class="prompt" style="font-size: 14px; position: absolute; height: 10%; top: 5px; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 3px 8px; border-radius: 4px;">
+                    Prompt: A chick wearing sunglasses, holding two guns, talking, with an evil vibe.
+                </div>
+                <video playsinline controls  loop  preload="none" poster="vis/c-2.jpg" src="vis/c-2.mp4"></video><a class="full-screen-button"></a></div> 
+            
+        </div>
+        
+        
+    </section>
+
+    
+
+
+
+    <section id="multi-person-scene-performance">
+        <div class="title">Multi-Person Scene Performance</div>
+        <div class="description">
+            Our framework extends to complex multi-person scenes. It generates dynamic group dialogues and ensemble performances by routing separate audio tracks to the correct characters in a single frame.
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/g-1.jpg" src="vis/g-1.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/g-2.jpg" src="vis/g-2.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/g-3.jpg" src="vis/g-3.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.65; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/g-5.jpg" src="vis/g-5.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/g-4.jpg" src="vis/g-4.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/g-6.jpg" src="vis/g-6.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+    </section>
+
+        
+    <section id="diversity-and-robustness">
+        <div class="title">More Results on Diverse Inputs</div>
+        <div class="description">
+            Our model demonstrates true robustness by generating high-quality, synchronized video across an incredible diversity of subjects, including real animals, anthropomorphic characters, and stylized cartoons.
+        </div>
+        <div class="flex-row">
+            <div class="prompt-wrap" style="flex-grow: 1.48; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-1.jpg" src="vis/f-1.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 1.48; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-2.jpg" src="vis/f-2.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-3.jpg" src="vis/f-3.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-4.jpg" src="vis/f-4.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+        
+        <div class="flex-row">
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/f-6.jpg" src="vis/f-6.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/f-7.jpg" src="vis/f-7.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/f-8.jpg" src="vis/f-8.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap">
+                <video playsinline controls  loop  preload="none" poster="vis/f-9.jpg" src="vis/f-9.mp4"></video><a class="full-screen-button"></a></div>
+            <!-- <div class="prompt-wrap">
+                <video playsinline controls  loop  src="vis/b-10.mp4"></video><a class="full-screen-button"></a></div> -->
+        </div>
+        <div class="flex-row">
+            
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-12.jpg" src="vis/f-12.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.825; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-10.jpg" src="vis/f-10.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.625; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-11.jpg" src="vis/f-11.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 0.625; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-13.jpg" src="vis/f-13.mp4"></video><a class="full-screen-button"></a></div>
+            <div class="prompt-wrap" style="flex-grow: 2; height: 100%;">
+                <video playsinline controls  loop  preload="none" poster="vis/f-14.jpg" src="vis/f-14.mp4"></video><a class="full-screen-button"></a></div>
+        </div>
+    </section>
+
+    <section id="ethical-considerations">
+        <div class="title">Ethical Considerations</div>
+        <div class="description">
+            The images and audios in these demos are from public sources or generated by models and are used solely to demonstrate the capabilities of this research. This includes, in particular, analyzing how the model generates corresponding expressions and movements in response to a diverse range of inputs, thereby showcasing the potential technical contributions and academic value of our proposed framework. If there are any concerns, please contact us (jianwen.alan@gmail.com) and we will delete it in time. The template for this webpage is adapted from <a href="https://seaweed-apt.com/"><strong>APT Series</strong> </a>. Special thanks to the author for sharing not only his wonderful template but also insightful research works.
+        </div>
+    </section>
+
+
+        <section id="BibTeX">
+        <div class="title">BibTeX</div>
+        <div class="description">
+            If you find this project useful for your research, you can cite us and check out other related works from our team.
+        </div>
+         <pre style="text-align: left;margin-left: 10%;width: 60%;"><code>
+
+@inproceedings{lin2025omnihuman1,
+    title     = {OmniHuman-1: Rethinking the Scaling-Up of One-Stage Conditioned Human Animation Models},
+    author    = {Lin, Gaojie and Jiang, Jianwen and Yang, Jiaqi and Zheng, Zerong and Liang, Chao and others},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    year      = {2025},
+    note      = {Highlight}
+}
+
+@inproceedings{jiang2025loopy,
+    title     = {Loopy: Taming Audio-Driven Portrait Avatar with Long-Term Motion Dependency},
+    author    = {Jiang, Jianwen and Liang, Chao and Yang, Jiaqi and Lin, Gaojie and Zhong, Tianyun and Zheng, Yanbo},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year      = {2025},
+    note      = {Oral presentation}
+}
+
+@inproceedings{lin2025cyberhost,
+    title     = {CyberHost: Taming Audio-driven Avatar Diffusion Model with Region Codebook Attention},
+    author    = {Lin, Gaojie and Jiang, Jianwen and Liang, Chao and Zhong, Tianyun and Yang, Jiaqi and Zheng, Yanbo},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year      = {2025},
+    note      = {Oral presentation}
+}
+            </code></pre>
+
+    </section>
+
+
+
+    <script>
+        // Add intersection observer to reveal footer links when scrolled into view
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script content would go here
+        });
+    </script>
+</body>
+</html>
